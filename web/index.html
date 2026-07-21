@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>image-demo · 卷积核可视化</title>
+<style>
+  * { box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif; margin: 0; padding: 20px 24px; background: #FAFAFA; color: #2C2C2A; }
+  h1 { font-size: 20px; font-weight: 500; margin: 0 0 2px; }
+  .sub { color: #5F5E5A; font-size: 12px; margin-bottom: 20px; }
+  .section-title { font-size: 11px; color: #5F5E5A; margin: 0 0 8px; font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; }
+
+  .thumbs { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+  .thumb { position: relative; width: 104px; height: 68px; border-radius: 8px; overflow: hidden; cursor: pointer; border: 2px solid transparent; background: #fff; }
+  .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .thumb .label { position: absolute; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.55); color: #fff; font-size: 10px; padding: 2px 6px; text-align: center; }
+  .thumb.active { border-color: #534AB7; }
+
+  .kernel-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(108px, 1fr)); gap: 8px; margin-bottom: 20px; }
+  .kc { background: #fff; border: 1px solid #D3D1C7; border-radius: 10px; padding: 8px; cursor: pointer; }
+  .kc:hover { border-color: #888780; }
+  .kc.active { border-color: #534AB7; background: #EEEDFE; }
+  .kc .krow { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
+  .kc .kname { font-size: 12px; font-weight: 500; }
+  .kc .kcat { font-size: 9px; padding: 1px 5px; border-radius: 4px; color: #fff; }
+  .kmat { display: grid; grid-template-columns: repeat(3, 18px); gap: 2px; margin: 4px auto 2px; width: fit-content; }
+  .kmat > div { width: 18px; height: 18px; font-family: ui-monospace, monospace; font-size: 9px; display: flex; align-items: center; justify-content: center; border-radius: 2px; }
+
+  .stage { display: grid; grid-template-columns: 1fr 1fr 210px; gap: 14px; align-items: start; }
+  .panel { background: #fff; border: 0.5px solid #D3D1C7; border-radius: 12px; padding: 12px; }
+  .panel h3 { margin: 0 0 8px; font-size: 12px; font-weight: 500; color: #5F5E5A; }
+  canvas { display: block; width: 100%; height: auto; background: #fff; border: 0.5px solid #D3D1C7; border-radius: 6px; }
+
+  #matrix { display: grid; grid-template-columns: repeat(3, 38px); gap: 4px; margin: 8px auto; width: fit-content; }
+  #matrix > div { width: 38px; height: 38px; font-family: ui-monospace, monospace; font-size: 14px; display: flex; align-items: center; justify-content: center; border-radius: 4px; }
+
+  .meta { font-size: 11px; color: #5F5E5A; text-align: center; line-height: 1.6; }
+  .meta .name { font-weight: 500; color: #2C2C2A; font-size: 13px; }
+  .meta .timing { color: #0F6E56; margin-top: 6px; }
+  .loading { color: #185FA5; font-size: 11px; text-align: center; padding: 6px; min-height: 18px; }
+</style>
+</head>
+<body>
+  <h1>image-demo · 卷积核可视化</h1>
+  <div class="sub">选择原图与卷积核，实时查看卷积效果（算法与 Python 核心层一致）</div>
+
+  <div class="section-title">原图</div>
+  <div class="thumbs" id="thumbs"></div>
+
+  <div class="section-title">卷积核</div>
+  <div class="kernel-grid" id="kernelGrid"></div>
+
+  <div class="stage">
+    <div class="panel"><h3>原图</h3><canvas id="original"></canvas></div>
+    <div class="panel">
+      <h3>结果</h3>
+      <canvas id="result"></canvas>
+      <div class="loading" id="loading"></div>
+    </div>
+    <div class="panel">
+      <h3>核矩阵</h3>
+      <div id="matrix"></div>
+      <div class="meta" id="meta"></div>
+    </div>
+  </div>
+
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>

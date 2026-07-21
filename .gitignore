@@ -1,0 +1,16 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+python/output/
+
+# Node
+web/node_modules/
+web/dist/
+
+# WorkBuddy
+.workbuddy/
+
+# OS
+.DS_Store
+Thumbs.db
