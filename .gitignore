@@ -3,6 +3,7 @@ __pycache__/
 *.pyc
 *.pyo
 python/output/
+python/data/
 
 # Node
 web/node_modules/

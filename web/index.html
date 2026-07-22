@@ -8,6 +8,9 @@
   body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif; margin: 0; padding: 20px 24px; background: #FAFAFA; color: #2C2C2A; }
   h1 { font-size: 20px; font-weight: 500; margin: 0 0 2px; }
   .sub { color: #5F5E5A; font-size: 12px; margin-bottom: 20px; }
+  .nav { display: flex; gap: 14px; margin-bottom: 14px; font-size: 12px; }
+  .nav a { color: #534AB7; text-decoration: none; }
+  .nav a.active { color: #2C2C2A; font-weight: 500; }
   .section-title { font-size: 11px; color: #5F5E5A; margin: 0 0 8px; font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; }
 
   .thumbs { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
@@ -41,6 +44,10 @@
 </style>
 </head>
 <body>
+  <div class="nav">
+    <a href="/" class="active">卷积核实验室</a>
+    <a href="/cnn.html">CNN 手写识别</a>
+  </div>
   <h1>image-demo · 卷积核可视化</h1>
   <div class="sub">选择原图与卷积核，实时查看卷积效果（算法与 Python 核心层一致）</div>
 

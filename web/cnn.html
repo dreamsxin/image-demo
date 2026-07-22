@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>image-demo · CNN 手写数字识别</title>
+<style>
+  * { box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif; margin: 0; padding: 20px 24px; background: #FAFAFA; color: #2C2C2A; }
+  h1 { font-size: 20px; font-weight: 500; margin: 0 0 2px; }
+  .sub { color: #5F5E5A; font-size: 12px; margin-bottom: 16px; }
+  .nav { display: flex; gap: 14px; margin-bottom: 14px; font-size: 12px; }
+  .nav a { color: #534AB7; text-decoration: none; }
+  .nav a.active { color: #2C2C2A; font-weight: 500; }
+  .section-title { font-size: 11px; color: #5F5E5A; margin: 0 0 8px; font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; }
+
+  .layout { display: grid; grid-template-columns: 320px 1fr 1fr; gap: 14px; align-items: start; }
+  .panel { background: #fff; border: 0.5px solid #D3D1C7; border-radius: 12px; padding: 14px; }
+  .panel h3 { margin: 0 0 8px; font-size: 12px; font-weight: 500; color: #5F5E5A; }
+
+  #drawWrap { position: relative; width: 280px; height: 280px; margin: 0 auto; border-radius: 8px; overflow: hidden; border: 0.5px solid #D3D1C7; }
+  #drawCanvas { display: block; width: 280px; height: 280px; background: #000; cursor: crosshair; touch-action: none; }
+  .draw-btns { display: flex; gap: 8px; margin-top: 10px; }
+  button { font-family: inherit; font-size: 12px; padding: 6px 12px; border: 0.5px solid #D3D1C7; border-radius: 8px; background: #fff; color: #2C2C2A; cursor: pointer; }
+  button:hover { border-color: #888780; }
+  button.primary { background: #534AB7; color: #fff; border-color: #534AB7; }
+  .hint { font-size: 11px; color: #888780; margin-top: 8px; text-align: center; }
+
+  .samples { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-top: 10px; }
+  .sample { cursor: pointer; border: 1.5px solid transparent; border-radius: 6px; overflow: hidden; background: #000; aspect-ratio: 1; }
+  .sample canvas { width: 100%; height: 100%; display: block; image-rendering: pixelated; }
+  .sample:hover { border-color: #888780; }
+  .sample.active { border-color: #534AB7; }
+
+  .pred-wrap { text-align: center; padding: 6px 0 10px; }
+  .pred-digit { font-size: 76px; font-weight: 300; line-height: 1; color: #534AB7; font-family: ui-monospace, monospace; }
+  .pred-label { font-size: 11px; color: #5F5E5A; margin-top: 4px; }
+
+  .conf { display: flex; align-items: stretch; gap: 6px; height: 170px; margin-top: 6px; }
+  .bar-col { flex: 1; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; gap: 3px; }
+  .bar { width: 72%; background: #D3D1C7; border-radius: 4px 4px 0 0; min-height: 2px; }
+  .bar.top { background: #0F6E56; }
+  .bar-label { font-size: 11px; color: #5F5E5A; }
+  .bar-val { font-size: 9px; color: #888780; min-height: 11px; }
+
+  .feat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .feat { text-align: center; }
+  .feat canvas { width: 100%; aspect-ratio: 1; background: #000; border-radius: 4px; image-rendering: pixelated; border: 0.5px solid #D3D1C7; }
+  .feat span { font-size: 10px; color: #888780; }
+
+  .status { color: #185FA5; font-size: 11px; text-align: center; min-height: 16px; margin-top: 8px; }
+</style>
+</head>
+<body>
+  <div class="nav">
+    <a href="/">卷积核实验室</a>
+    <a href="/cnn.html" class="active">CNN 手写识别</a>
+  </div>
+  <h1>image-demo · CNN 手写数字识别</h1>
+  <div class="sub">纯 TypeScript 前向传播（Conv → ReLU → MaxPool → FC），权重来自 Python 训练的 MnistCNN，浏览器内实时推理</div>
+
+  <div class="layout">
+    <div class="panel">
+      <h3>输入</h3>
+      <div id="drawWrap"><canvas id="drawCanvas" width="280" height="280"></canvas></div>
+      <div class="draw-btns">
+        <button id="clearBtn">清除</button>
+        <button id="recognizeBtn" class="primary">识别</button>
+      </div>
+      <div class="hint">在黑底上用白色画一个数字（0-9）</div>
+      <div class="section-title" style="margin-top: 14px">MNIST 示例</div>
+      <div class="samples" id="sampleGrid"></div>
+    </div>
+
+    <div class="panel">
+      <h3>预测结果</h3>
+      <div class="pred-wrap">
+        <div class="pred-digit" id="predDigit">-</div>
+        <div class="pred-label" id="predLabel">点击「识别」</div>
+      </div>
+      <div class="section-title" style="margin-top: 10px">置信度分布</div>
+      <div class="conf" id="confBar"></div>
+      <div class="status" id="status"></div>
+    </div>
+
+    <div class="panel">
+      <h3>Conv1 特征图（学习到的卷积核提取结果）</h3>
+      <div class="feat-grid" id="featGrid"></div>
+    </div>
+  </div>
+
+  <script type="module" src="/src/cnn/main.ts"></script>
+</body>
+</html>

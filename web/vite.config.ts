@@ -5,4 +5,12 @@ export default defineConfig({
     port: 5173,
     host: '127.0.0.1',
   },
+  build: {
+    rollupOptions: {
+      input: {
+        main: 'index.html',
+        cnn: 'cnn.html',
+      },
+    },
+  },
 });
